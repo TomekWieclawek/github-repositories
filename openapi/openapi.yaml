@@ -1,0 +1,84 @@
+openapi: 3.0.3
+info:
+  title: GitHub repositories API
+  description: API for retrieving information about GitHub repositories
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: local development
+
+tags:
+  - name: gitHub-repository-controller
+    description: 'GitHub Repository controller that manages information about GitHub repositories'
+paths:
+  /api/v1/github/repositories/{username}:
+    get:
+      summary: Get list of GitHub repositories by username
+      operationId: getGithubRepositoriesByUsername
+      description: Gets list of GitHub repositories that are not forks for given username
+      tags:
+        - gitHub-repository-controller
+      parameters:
+        - $ref: '#/components/parameters/username'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GitHubRepositoryResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    GitHubRepositoryResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Code repository name
+        ownerLogin:
+          type: string
+          example: User1
+        branches:
+          type: array
+          items:
+            $ref: '#/components/schemas/GitHubBranchResponse'
+    GitHubBranchResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          example: develop
+        lastCommitSha:
+          type: string
+          example: 1577e099353832714b6b128e5f375dc18c16ed87
+    ErrorResponse:
+      properties:
+        status:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Error message with reason
+  parameters:
+    username:
+      name: username
+      in: path
+      required: true
+      description: Github username
+      example: User1
+      schema:
+        type: string

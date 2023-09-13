@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Repo_A",
+    "fork": false,
+    "owner": {
+      "login": "user"
+    }
+  },
+  {
+    "name": "Repo_B",
+    "fork": true,
+    "owner": {
+      "login": "user"
+    }
+  }
+]
